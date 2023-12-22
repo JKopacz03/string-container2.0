@@ -9,7 +9,8 @@ public class Main {
         StringContainer st = new StringContainer("\\d{2}[-]\\d{3}", true);
 
         st.add("00-000");
-        TimeUnit.SECONDS.sleep(1);
+        TimeUnit.SECONDS.sleep(1); // dodałem bo inaczej java daje w niektorych te same localDateTime.now()
+        // i metoda getDataBetween nawala :(
         st.add("00-001");
         TimeUnit.SECONDS.sleep(1);
         st.add("00-002");
@@ -18,31 +19,24 @@ public class Main {
         TimeUnit.SECONDS.sleep(1);
         st.add("00-004");
 
+        for(int i=0; i<st.size(); i++){
+            System.out.println(st.get(i));
+        }
 
+        st.remove("00-003");
+        st.remove(1);
 
-//        st.storeToFile("postalcodes.txt");
-//
-//        StringContainer fromFile = st.fromFile("postalcodes.txt");
+        for(int i=0; i<st.size(); i++){
+            System.out.println(st.get(i));
+        }
 
-//        System.out.println(fromFile);
-
-//        for(int i=0; i<st.size(); i++){
-//            System.out.println(st.get(i)); //powinno wypisac dodane kody pocztowe
-//        }
-
-        LocalDateTime zero = st.get("00-000").getAddTime();
-        LocalDateTime one = st.get("00-001").getAddTime();
-        LocalDateTime two = st.get("00-002").getAddTime();
-        LocalDateTime three = st.get("00-003").getAddTime();
-        System.out.println(zero);
-        System.out.println(one);
-        System.out.println(two);
-        System.out.println(three);
-
-        StringContainer dataBetween = st.getDataBetween(st.get("00-001").getAddTime(),
-                st.get("00-002").getAddTime());
+        StringContainer dataBetween = st.getDataBetween(st.get("00-002").getAddTime(),
+                st.get("00-004").getAddTime());
         dataBetween.show();
 
+        st.storeToFile("postalCodes.txt");
+
+        StringContainer fromFile = st.fromFile("postalCodes.txt");
 
     }
 }
