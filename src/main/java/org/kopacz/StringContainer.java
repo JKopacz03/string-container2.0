@@ -3,6 +3,7 @@ package org.kopacz;
 import org.kopacz.exception.DuplicatedElementOnListException;
 import org.kopacz.exception.InvalidStringContainerValueException;
 
+import java.io.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -38,6 +39,10 @@ public class StringContainer {
         private Node next;
         private String date;
         private LocalDateTime addTime = LocalDateTime.now();
+
+        public LocalDateTime getAddTime() {
+            return addTime;
+        }
 
         @Override
         public String toString() {
@@ -139,12 +144,12 @@ public class StringContainer {
         return n.date;
     }
 
-    public String get(String object) {
+    public Node get(String object) {
         Node n = head;
         while (n.date != object) {
             n = n.next;
         }
-        return n.date;
+        return n;
     }
 
     public int size(){
@@ -182,6 +187,38 @@ public class StringContainer {
             stringContainer.add(n.date);
         }
         return stringContainer;
+    }
+
+    public void storeToFile(String name){
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter(name, true))) {
+
+            String line;
+            for (int i = 0; i < size; i++) {
+                writer.write(get(i) + "\n");
+            }
+
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public StringContainer fromFile(String name) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(name))) {
+
+            StringContainer stringContainer = new StringContainer(pattern);
+
+            String line;
+            while((line = reader.readLine()) != null) {
+                stringContainer.add(line);
+            }
+
+            return stringContainer;
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
 
