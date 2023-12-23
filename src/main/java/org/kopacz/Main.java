@@ -30,6 +30,11 @@ public class Main {
             System.out.println(st.get(i));
         }
 
+
+        System.out.println(st.get("00-002").getAddTime());
+        System.out.println(st.get("00-003").getAddTime());
+        System.out.println(st.get("00-004").getAddTime());
+
         StringContainer dataBetween = st.getDataBetween(st.get("00-002").getAddTime(),
                 st.get("00-004").getAddTime());
         dataBetween.show();

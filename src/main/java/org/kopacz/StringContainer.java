@@ -40,6 +40,15 @@ public class StringContainer {
         private String date;
         private LocalDateTime addTime = LocalDateTime.now();
 
+        private Node() {
+        }
+
+        private Node(Node next, String date, LocalDateTime addTime) {
+            this.next = next;
+            this.date = date;
+            this.addTime = addTime;
+        }
+
         public LocalDateTime getAddTime() {
             return addTime;
         }
@@ -78,6 +87,19 @@ public class StringContainer {
         }
 
         size++;
+    }
+
+    public void add(Node an) {
+        Node node = new Node(null, an.date, an.addTime);
+        if (head == null) {
+            head = node;
+        } else {
+            Node n = head;
+            while (n.next != null) {
+                n = n.next;
+            }
+            n.next = node;
+        }
     }
 
     private void checkIfDateIsDuplicated(String date) {
@@ -128,10 +150,10 @@ public class StringContainer {
     public void show() {
         Node n = head;
         while (n.next != null) {
-            System.out.println(n.date);
+            System.out.println(n);
             n = n.next;
         }
-        System.out.println(n.date);
+        System.out.println(n);
     }
 
     public String get(int index) {
@@ -159,6 +181,15 @@ public class StringContainer {
     public StringContainer getDataBetween(LocalDateTime dateFrom, LocalDateTime dateTo){
         Node n = head;
         StringContainer stringContainer = new StringContainer(pattern);
+        if(dateFrom == null && dateTo == null){
+            while (true) {
+                if (n.next == null) {
+                    break;
+                }
+                stringContainer.add(n);
+                n = n.next;
+            }
+        }
         if(dateFrom != null) {
             while (n.addTime.isBefore(dateFrom)) {
                 if (n.next == null) {
@@ -172,19 +203,19 @@ public class StringContainer {
                 if (n.next == null) {
                     break;
                 }
-                stringContainer.add(n.date);
+                stringContainer.add(n);
                 n = n.next;
             }
-            stringContainer.add(n.date);
+            stringContainer.add(n);
         } else {
             while (true) {
                 if (n.next == null) {
                     break;
                 }
-                stringContainer.add(n.date);
+                stringContainer.add(n);
                 n = n.next;
             }
-            stringContainer.add(n.date);
+            stringContainer.add(n);
         }
         return stringContainer;
     }
