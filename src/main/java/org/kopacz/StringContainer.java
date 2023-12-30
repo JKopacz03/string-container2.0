@@ -9,13 +9,12 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class StringContainer {
+public class StringContainer implements Serializable {
 
     private Node head;
     private String pattern;
     private Boolean duplicatedNotAllowed = false;
     private int size = 0;
-
     public StringContainer(String pattern) {
         this.pattern = pattern;
     }
@@ -35,7 +34,7 @@ public class StringContainer {
                 '}';
     }
 
-    public static class Node {
+    public static class Node implements Serializable{
         private Node next;
         private String date;
         private LocalDateTime addTime = LocalDateTime.now();
@@ -179,52 +178,39 @@ public class StringContainer {
     }
 
     public StringContainer getDataBetween(LocalDateTime dateFrom, LocalDateTime dateTo){
-        Node n = head;
         StringContainer stringContainer = new StringContainer(pattern);
-        if(dateFrom == null && dateTo == null){
-            while (true) {
-                if (n.next == null) {
-                    break;
-                }
+
+        Node n = head;
+
+        for (int i = 0; i < size; i++) {
+            boolean after = validateDateFrom(dateFrom, n);
+            boolean before = validateDateTo(dateTo, n);
+            if(after && before){
                 stringContainer.add(n);
-                n = n.next;
             }
-        }
-        if(dateFrom != null) {
-            while (n.addTime.isBefore(dateFrom)) {
-                if (n.next == null) {
-                    break;
-                }
-                n = n.next;
-            }
-        }
-        if(dateTo != null) {
-            while (n.addTime.isBefore(dateTo)) {
-                if (n.next == null) {
-                    break;
-                }
-                stringContainer.add(n);
-                n = n.next;
-            }
-            stringContainer.add(n);
-        } else {
-            while (true) {
-                if (n.next == null) {
-                    break;
-                }
-                stringContainer.add(n);
-                n = n.next;
-            }
-            stringContainer.add(n);
+            n = n.next;
         }
         return stringContainer;
+    }
+
+    private static boolean validateDateFrom(LocalDateTime date, Node n) {
+        if(Objects.isNull(date)){
+            return true;
+        }
+        return n.addTime.isAfter(date);
+    }
+
+    private static boolean validateDateTo(LocalDateTime date, Node n) {
+        if(Objects.isNull(date)){
+            return true;
+        }
+        return n.addTime.isBefore(date);
     }
 
     public void storeToFile(String name){
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(name, true))) {
 
-            String line;
             for (int i = 0; i < size; i++) {
                 writer.write(get(i) + "\n");
             }
@@ -233,23 +219,7 @@ public class StringContainer {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
 
-    public StringContainer fromFile(String name) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(name))) {
-
-            StringContainer stringContainer = new StringContainer(pattern);
-
-            String line;
-            while((line = reader.readLine()) != null) {
-                stringContainer.add(line);
-            }
-
-            return stringContainer;
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 }
 

@@ -1,5 +1,6 @@
 package org.kopacz;
 
+import java.io.*;
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 
@@ -19,6 +20,7 @@ public class Main {
         TimeUnit.SECONDS.sleep(1);
         st.add("00-004");
 
+        st.show();
         for(int i=0; i<st.size(); i++){
             System.out.println(st.get(i));
         }
@@ -35,13 +37,14 @@ public class Main {
         System.out.println(st.get("00-003").getAddTime());
         System.out.println(st.get("00-004").getAddTime());
 
-        StringContainer dataBetween = st.getDataBetween(st.get("00-002").getAddTime(),
-                st.get("00-004").getAddTime());
+        StringContainer dataBetween = st.getDataBetween(null,
+                null);
         dataBetween.show();
 
         st.storeToFile("postalCodes.txt");
 
-        StringContainer fromFile = st.fromFile("postalCodes.txt");
+        //nie mam pojecia jak zrobic te fromFile, zeby nie było metodą :(
+
 
     }
 }
