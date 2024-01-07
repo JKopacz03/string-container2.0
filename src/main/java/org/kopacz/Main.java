@@ -41,10 +41,6 @@ public class Main {
                 null);
         dataBetween.show();
 
-//        st.storeToFile("postalCodes.txt");
-
-        //nie mam pojecia jak zrobic te fromFile, zeby nie było metodą :(
-
         st.storeToFile("postalCodes.txt");
         StringContainer fromFile = StringContainer.fromFile("postalCodes.txt");
 
