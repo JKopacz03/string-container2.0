@@ -34,17 +34,19 @@ public class Main {
 
 
         System.out.println(st.get("00-002").getAddTime());
-        System.out.println(st.get("00-003").getAddTime());
+//        System.out.println(st.get("00-003").getAddTime());
         System.out.println(st.get("00-004").getAddTime());
 
         StringContainer dataBetween = st.getDataBetween(null,
                 null);
         dataBetween.show();
 
-        st.storeToFile("postalCodes.txt");
+//        st.storeToFile("postalCodes.txt");
 
         //nie mam pojecia jak zrobic te fromFile, zeby nie było metodą :(
 
+        st.storeToFile("postalCodes.txt");
+        StringContainer fromFile = StringContainer.fromFile("postalCodes.txt");
 
     }
 }
