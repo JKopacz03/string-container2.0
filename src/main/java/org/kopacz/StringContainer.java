@@ -19,22 +19,10 @@ public class StringContainer implements Serializable {
         this.pattern = pattern;
     }
 
-    public StringContainer() {
-    }
-
     public StringContainer(String pattern, Boolean duplicatedNotAllowed) {
         this.pattern = pattern;
         this.duplicatedNotAllowed = duplicatedNotAllowed;
     }
-
-    private StringContainer(Node head, String pattern, Boolean duplicatedNotAllowed, int size) {
-        this.head = head;
-        this.pattern = pattern;
-        this.duplicatedNotAllowed = duplicatedNotAllowed;
-        this.size = size;
-    }
-
-
 
     @Override
     public String toString() {
@@ -46,18 +34,18 @@ public class StringContainer implements Serializable {
                 '}';
     }
 
-    public static class Node implements Serializable{
+    public static class Node implements Serializable {
         private Node next;
         private String data;
         private LocalDateTime addTime = LocalDateTime.now();
-
-        private Node() {
-        }
 
         private Node(Node next, String data, LocalDateTime addTime) {
             this.next = next;
             this.data = data;
             this.addTime = addTime;
+        }
+
+        public Node() {
         }
 
         public LocalDateTime getAddTime() {
@@ -98,19 +86,6 @@ public class StringContainer implements Serializable {
         }
 
         size++;
-    }
-
-    private void add(Node an) {
-        Node node = new Node(null, an.data, an.addTime);
-        if (head == null) {
-            head = node;
-        } else {
-            Node n = head;
-            while (n.next != null) {
-                n = n.next;
-            }
-            n.next = node;
-        }
     }
 
     private void checkIfDataIsDuplicated(String data) {
@@ -158,15 +133,6 @@ public class StringContainer implements Serializable {
         size--;
     }
 
-    public void show() {
-        Node n = head;
-        while (n.next != null) {
-            System.out.println(n);
-            n = n.next;
-        }
-        System.out.println(n);
-    }
-
     public String get(int index) {
         Node n = head;
         int i = 0;
@@ -175,14 +141,6 @@ public class StringContainer implements Serializable {
             i++;
         }
         return n.data;
-    }
-
-    public Node get(String object) {
-        Node n = head;
-        while (!Objects.equals(n.data, object)) {
-            n = n.next;
-        }
-        return n;
     }
 
     public int size(){
@@ -198,7 +156,7 @@ public class StringContainer implements Serializable {
             boolean after = validateDateFrom(dateFrom, n);
             boolean before = validateDateTo(dateTo, n);
             if(after && before){
-                stringContainer.add(n);
+                stringContainer.add(n.data);
             }
             n = n.next;
         }
@@ -209,23 +167,20 @@ public class StringContainer implements Serializable {
         if(Objects.isNull(date)){
             return true;
         }
-        return n.addTime.isAfter(date) || n.addTime.equals(date);
+        return n.addTime.isAfter(date) || n.addTime.isEqual(date);
     }
 
     private static boolean validateDateTo(LocalDateTime date, Node n) {
         if(Objects.isNull(date)){
             return true;
         }
-        return n.addTime.isBefore(date) || n.addTime.equals(date);
+        return n.addTime.isBefore(date) || n.addTime.isEqual(date);
     }
 
     public void storeToFile(String name){
 
-        StringContainer stringContainer = new StringContainer(head, pattern, duplicatedNotAllowed, size);
-
-
         try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(name))) {
-            outputStream.writeObject(stringContainer);
+            outputStream.writeObject(this);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
