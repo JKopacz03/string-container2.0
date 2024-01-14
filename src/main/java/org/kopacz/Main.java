@@ -20,7 +20,6 @@ public class Main {
         TimeUnit.SECONDS.sleep(1);
         st.add("00-004");
 
-        st.show();
         for(int i=0; i<st.size(); i++){
             System.out.println(st.get(i));
         }
